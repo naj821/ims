@@ -3,6 +3,7 @@ package com.vauldex.inventory_management.domain.entity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
+import jakarta.persistence.Id
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -11,6 +12,7 @@ import java.util.UUID
 class CategoryEntity (
         @Column(name = "name")
         var name: String,
+        @Id
         @Column(name = "id")
         var id: UUID = UUID.randomUUID(),
         @Column(name = "created_at")
