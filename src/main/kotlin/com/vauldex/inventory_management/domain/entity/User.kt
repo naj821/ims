@@ -1,4 +1,4 @@
-package domain.entity
+package com.vauldex.inventory_management.domain.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

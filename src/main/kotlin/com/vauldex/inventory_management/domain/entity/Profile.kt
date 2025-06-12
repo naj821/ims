@@ -1,4 +1,4 @@
-package domain.entity
+package com.vauldex.inventory_management.domain.entity
 
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
@@ -7,7 +7,6 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import java.time.LocalDateTime
-import java.util.UUID
 
 @Entity
 @Table(name = "profiles")
