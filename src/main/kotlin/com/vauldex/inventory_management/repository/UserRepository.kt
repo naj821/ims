@@ -7,7 +7,7 @@ import java.util.UUID
 
 @Repository
 interface UserRepository: JpaRepository<UserEntity, UUID> {
-    fun existByEmailAndPassword(email: String, password: String): Boolean
+    fun existsByEmailAndPassword(email: String, password: String): Boolean
     fun findByEmailAndPassword(email: String, password: String): UserEntity
 
 }

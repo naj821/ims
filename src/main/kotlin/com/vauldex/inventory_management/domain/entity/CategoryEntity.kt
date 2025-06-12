@@ -2,7 +2,11 @@ package com.vauldex.inventory_management.domain.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
 import jakarta.persistence.Table
+import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -12,7 +16,10 @@ class CategoryEntity (
         @Column(name = "name")
         var name: String,
         @Column(name = "id")
-        var id: UUID = UUID.randomUUID(),
+        @Id
+        @GeneratedValue(strategy = GenerationType.UUID)
+        var id: UUID? = null,
         @Column(name = "created_at")
-        var createdAt: LocalDateTime = LocalDateTime.now()
+        @CreationTimestamp
+        var createdAt: LocalDateTime? = null
 )

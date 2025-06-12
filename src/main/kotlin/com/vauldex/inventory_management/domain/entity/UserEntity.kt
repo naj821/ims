@@ -19,7 +19,7 @@ class UserEntity (
         @Column(name = "password")
         var password: String,
         @Column(name ="role")
-        var role: String,
+        var role: String = "staff",
         @Column(name = "id")
         @Id
         @GeneratedValue(strategy = GenerationType.UUID)
