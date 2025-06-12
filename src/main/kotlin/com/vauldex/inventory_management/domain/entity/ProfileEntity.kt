@@ -5,6 +5,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToOne
+import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.time.LocalDateTime
 
@@ -17,6 +18,7 @@ class ProfileEntity (
         var middleName: String,
         @Column(name = "last_name")
         var lastName: String,
+        @Id
         @OneToOne(cascade = [CascadeType.REMOVE])
         @JoinColumn(name = "user_id")
         val userEntity: UserEntity,
