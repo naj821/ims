@@ -11,7 +11,7 @@ import java.util.UUID
 
 @Entity
 @Table(name = "products")
-class Product (
+class ProductEntity (
         @Column(name = "product_name")
         var productName: String,
         @Column(name = "quantity")
@@ -20,7 +20,7 @@ class Product (
         var id: UUID = UUID.randomUUID(),
         @ManyToOne(cascade = [CascadeType.REMOVE])
         @JoinColumn(name = "category_id")
-        var categoryId: Category,
+        var categoryEntityId: CategoryEntity,
         @Column(name = "created_at")
         var createdAt: LocalDateTime = LocalDateTime.now()
 )

@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "profiles")
-class Profile (
+class ProfileEntity (
         @Column(name ="first_name")
         var firstName: String,
         @Column(nullable = false)
@@ -19,7 +19,7 @@ class Profile (
         var lastName: String,
         @OneToOne(cascade = [CascadeType.REMOVE])
         @JoinColumn(name = "user_id")
-        val user: User,
+        val userEntity: UserEntity,
         @Column(name = "created_at")
         var createdAt: LocalDateTime = LocalDateTime.now()
 )

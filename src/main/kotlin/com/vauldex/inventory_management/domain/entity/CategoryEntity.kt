@@ -7,12 +7,10 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
-@Table(name = "users")
-class User (
-        @Column(name = "email")
-        var email: String,
-        @Column(name = "password")
-        var password: String,
+@Table(name = "categories")
+class CategoryEntity (
+        @Column(name = "name")
+        var name: String,
         @Column(name = "id")
         var id: UUID = UUID.randomUUID(),
         @Column(name = "created_at")
