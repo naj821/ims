@@ -2,6 +2,7 @@ package com.vauldex.inventory_management.controller
 
 import com.vauldex.inventory_management.domain.dto.request.ProductRequest
 import com.vauldex.inventory_management.domain.dto.response.ProductResponse
+import com.vauldex.inventory_management.response.ResponseSuccess
 import com.vauldex.inventory_management.service.abstraction.ProductService
 import org.springframework.data.repository.query.Param
 import org.springframework.http.HttpStatus
@@ -19,15 +20,29 @@ import org.springframework.web.bind.annotation.RestController
 class ProductController(private val prodService: ProductService) {
 
     @PostMapping
-    fun save(@RequestBody product: ProductRequest): ResponseEntity<String> {
+    fun save(@RequestBody product: ProductRequest): ResponseSuccess<String> {
         val category = prodService.getCategoryName(category = product.category)
         val prod = prodService.save(product = product.toEntity(cat = category))
-        return ResponseEntity.status(HttpStatus.CREATED).body(prod)
+        val response = ResponseSuccess(
+                code = "PRODUCT_SAVED",
+                status = HttpStatus.OK,
+                data = prod
+        )
+        return response
     }
 
     @GetMapping
-    fun search(@RequestParam productName: String): ResponseEntity<ProductResponse> {
+    fun search(@RequestParam productName: String): ResponseSuccess<ProductResponse>{
         val prod = prodService.search(product = productName)
-        return ResponseEntity.status(HttpStatus.OK).body(prod)
+
+        val response = ResponseSuccess(
+                code = "PRODUCT_FOUND",
+                status = HttpStatus.OK,
+                data = prod
+                )
+        return response
+//        return ResponseEntity.status(HttpStatus.OK).body(prod)
+
+
     }
 }
