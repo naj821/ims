@@ -53,4 +53,8 @@ class ProductServiceImpl(private val productRepo: ProductRepository,
             throw IllegalArgumentException("This error: ${error.message}")
         }
     }
+
+    override fun edit(product: ProductEntity): String {
+        TODO("Not yet implemented")
+    }
 }

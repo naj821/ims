@@ -41,8 +41,5 @@ class ProductController(private val prodService: ProductService) {
                 data = prod
                 )
         return response
-//        return ResponseEntity.status(HttpStatus.OK).body(prod)
-
-
     }
 }

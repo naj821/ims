@@ -11,8 +11,9 @@ class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleInvalidCredentials(ex: IllegalArgumentException): ResponseEntity<GlobalErrorMessageModel> {
         val errorMsg = GlobalErrorMessageModel(
-                status = HttpStatus.BAD_REQUEST.value(),
-                message = ex.message
+                code = ex.message,
+                status = HttpStatus.BAD_REQUEST,
+
         )
         return ResponseEntity(errorMsg, HttpStatus.BAD_REQUEST)
     }
