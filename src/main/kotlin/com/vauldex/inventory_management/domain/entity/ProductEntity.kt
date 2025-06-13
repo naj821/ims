@@ -19,9 +19,9 @@ import java.util.UUID
 @Table(name = "products")
 class ProductEntity (
         @Column(name = "product_name")
-        var productName: String,
+        var productName: String = "",
         @Column(name = "quantity")
-        var quantity: Int,
+        var quantity: Int = 0,
         @Column(name = "id")
         @Id
         @GeneratedValue(strategy = GenerationType.UUID)

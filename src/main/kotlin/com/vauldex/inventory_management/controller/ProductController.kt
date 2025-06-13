@@ -27,8 +27,7 @@ class ProductController(private val prodService: ProductService) {
 
     @GetMapping
     fun search(@RequestParam productName: String): ResponseEntity<ProductResponse> {
-        print("productName $productName")
-        val prod = prodService.search(product = "Hotdog")
+        val prod = prodService.search(product = productName)
         return ResponseEntity.status(HttpStatus.OK).body(prod)
     }
 }

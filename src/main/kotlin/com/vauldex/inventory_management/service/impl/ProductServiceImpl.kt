@@ -43,16 +43,14 @@ class ProductServiceImpl(private val productRepo: ProductRepository,
 
     override fun search(product: String): ProductResponse {
         try {
-            print("here in")
             val doesExists = productRepo.existsByProductName(product)
 
             if (!doesExists) throw IllegalArgumentException("No product found.")
 
             val prod = productRepo.findByProductName(product)
-            print("Here out")
             return prod.toResponse()
         } catch (error: IllegalArgumentException) {
-            throw IllegalArgumentException(error.message)
+            throw IllegalArgumentException("This error: ${error.message}")
         }
     }
 }
