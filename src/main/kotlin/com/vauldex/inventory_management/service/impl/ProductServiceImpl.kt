@@ -1,5 +1,6 @@
 package com.vauldex.inventory_management.service.impl
 
+import com.vauldex.inventory_management.domain.dto.request.ProductEditRequest
 import com.vauldex.inventory_management.domain.dto.response.ProductResponse
 import com.vauldex.inventory_management.domain.entity.CategoryEntity
 import com.vauldex.inventory_management.domain.entity.ProductEntity
@@ -54,7 +55,22 @@ class ProductServiceImpl(private val productRepo: ProductRepository,
         }
     }
 
-    override fun edit(product: ProductEntity): String {
-        TODO("Not yet implemented")
+    override fun editProduct(product: ProductEntity): String {
+        try{
+            val doesExists = productRepo.findById(product.id!!).orElse(null)
+
+            if (doesExists == null) throw IllegalArgumentException("Product does not exists.")
+
+            productRepo.saveAndFlush(ProductEntity(
+                    productName = product.productName,
+                    quantity = product.quantity,
+                    id = product.id,
+                    category = doesExists.category,
+                    createdAt = doesExists.createdAt
+                    ))
+            return "Product successfully edited."
+        } catch (error: IllegalArgumentException) {
+            throw IllegalArgumentException(error.message)
+        }
     }
 }
