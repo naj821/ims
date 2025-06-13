@@ -20,6 +20,23 @@ CREATE TABLE categories(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+INSERT INTO categories(name)
+VALUES('Groceries');
+INSERT INTO categories(name)
+VALUES('Body Essentials');
+INSERT INTO categories(name)
+VALUES('Baby & Child Essentials');
+INSERT INTO categories(name)
+VALUES('Personal Care');
+INSERT INTO categories(name)
+VALUES('Kitchen Essentials');
+INSERT INTO categories(name)
+VALUES('Cleaning Supplies');
+INSERT INTO categories(name)
+VALUES('Laundry');
+INSERT INTO categories(name)
+VALUES('Bathroom Supplies');
+
 CREATE TABLE products(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     category_id UUID REFERENCES categories(id) ON DELETE CASCADE,

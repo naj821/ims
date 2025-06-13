@@ -1,5 +1,7 @@
 package com.vauldex.inventory_management.domain.entity
 
+import com.vauldex.inventory_management.domain.dto.response.ProductResponse
+import com.vauldex.inventory_management.domain.dto.response.UserResponse
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -19,15 +21,20 @@ class ProductEntity (
         @Column(name = "product_name")
         var productName: String,
         @Column(name = "quantity")
-        var quantity: Int = 0,
+        var quantity: Int,
         @Column(name = "id")
         @Id
         @GeneratedValue(strategy = GenerationType.UUID)
         var id: UUID? = null,
         @ManyToOne(cascade = [CascadeType.REMOVE])
         @JoinColumn(name = "category_id")
-        var categoryEntityId: CategoryEntity,
+        var category: CategoryEntity? = null,
         @Column(name = "created_at")
         @CreationTimestamp
         var createdAt: LocalDateTime? = null
 )
+
+{
+        fun toResponse(): ProductResponse = ProductResponse(productName = productName, quantity = quantity)
+
+}

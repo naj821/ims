@@ -1,3 +1,18 @@
 package com.vauldex.inventory_management.domain.dto.request
 
-data class ProductRequest()
+import com.vauldex.inventory_management.domain.entity.CategoryEntity
+import com.vauldex.inventory_management.domain.entity.ProductEntity
+import jakarta.persistence.CascadeType
+import jakarta.persistence.FetchType
+import jakarta.persistence.ManyToOne
+import jdk.jfr.Category
+
+data class ProductRequest(val productName: String, val quantity: Int, val category: String)
+
+{
+    fun toEntity( cat: CategoryEntity): ProductEntity = ProductEntity(
+            productName = productName,
+            quantity = quantity,
+            category = cat
+            )
+}
