@@ -7,7 +7,7 @@ import java.util.UUID
 
 interface ProductService {
     fun save(product: ProductEntity): String
-    fun search(product: ProductEntity): ProductResponse
+    fun search(product: String): ProductResponse
     fun getCategoryName(category: String): CategoryEntity
 
 }
