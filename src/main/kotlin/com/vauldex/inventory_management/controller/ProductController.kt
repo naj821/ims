@@ -3,15 +3,14 @@ package com.vauldex.inventory_management.controller
 import com.vauldex.inventory_management.domain.dto.request.ProductEditRequest
 import com.vauldex.inventory_management.domain.dto.request.ProductRequest
 import com.vauldex.inventory_management.domain.dto.response.ProductResponse
+import com.vauldex.inventory_management.domain.entity.ProductEntity
 import com.vauldex.inventory_management.response.ResponseSuccess
 import com.vauldex.inventory_management.service.abstraction.ProductService
+import org.apache.coyote.Response
 import org.springframework.http.HttpStatus
-<<<<<<< HEAD
-=======
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
->>>>>>> 75f9ddc (Added delete functionality)
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -36,8 +35,8 @@ class ProductController(private val prodService: ProductService) {
         )
     }
 
-    @GetMapping
-    fun search(@RequestParam productName: String): ResponseSuccess<ProductResponse>{
+    @GetMapping("/{productName}")
+    fun search(@PathVariable productName: String): ResponseSuccess<ProductResponse>{
         val prod = prodService.search(product = productName)
 
         return ResponseSuccess(
@@ -68,5 +67,16 @@ class ProductController(private val prodService: ProductService) {
                 data = prod
         )
         return response
+    }
+
+    @GetMapping
+    fun get(): ResponseSuccess<List<ProductEntity>> {
+        val productResponse = prodService.getAllProduct()
+
+        return ResponseSuccess(
+            code = "PRODUCT_RETRIEVED",
+            status = HttpStatus.OK,
+            data = productResponse
+        )
     }
 }
