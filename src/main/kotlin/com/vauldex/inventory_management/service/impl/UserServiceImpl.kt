@@ -12,20 +12,28 @@ import org.springframework.stereotype.Service
 @Service
 class UserServiceImpl(private val userRepo: UserRepository): UserService {
     override fun authenticate(user: UserLoginRequest): UserResponse {
-        val doesExists = userRepo.existsByEmailAndPassword(email = user.email, password = user.password)
+        try {
+            val doesExists = userRepo.existsByEmailAndPassword(email = user.email, password = user.password)
 
-        if(!doesExists) throw IllegalArgumentException("Invalid Credentials")
+            if(!doesExists) throw IllegalArgumentException("Invalid Credentials")
 
-        val userResponse = userRepo.findByEmailAndPassword(email = user.email, password = user.password)
-        return userResponse.toResponse()
+            val userResponse = userRepo.findByEmailAndPassword(email = user.email, password = user.password)
+            return userResponse.toResponse()
+        } catch (error: IllegalArgumentException) {
+            throw IllegalArgumentException(error.message)
+        }
     }
 
     override fun create(user: UserCreateRequest): UserResponse {
-        val doesUserExist = userRepo.existsByEmail(email = user.email)
+        try {
+            val doesUserExist = userRepo.existsByEmail(email = user.email)
 
-        if(doesUserExist) throw IllegalArgumentException("User already exist")
+            if(doesUserExist) throw IllegalArgumentException("User already exist")
 
-        val userResponse = userRepo.save(user.toEntity())
-        return userResponse.toResponse()
+            val userResponse = userRepo.save(user.toEntity())
+            return userResponse.toResponse()
+        } catch (error: IllegalArgumentException) {
+            throw IllegalArgumentException(error.message)
+        }
     }
 }
