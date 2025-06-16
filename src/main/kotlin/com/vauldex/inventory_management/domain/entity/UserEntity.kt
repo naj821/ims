@@ -14,16 +14,20 @@ import java.util.UUID
 @Entity
 @Table(name = "users")
 class UserEntity (
-        @Column(name = "email")
-        var email: String,
-        @Column(name = "password")
-        var password: String,
-        @Column(name ="role")
-        var role: String = "staff",
         @Column(name = "id")
         @Id
         @GeneratedValue(strategy = GenerationType.UUID)
         var id: UUID? = null,
+
+        @Column(name = "email")
+        var email: String,
+
+        @Column(name = "password")
+        var password: String,
+
+        @Column(name ="role")
+        var role: String = "staff",
+
         @Column(name = "created_at")
         @CreationTimestamp
         var createdAt: LocalDateTime? = null
