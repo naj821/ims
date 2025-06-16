@@ -12,4 +12,5 @@ interface ProductService {
     fun getCategoryName(category: String): CategoryEntity
     fun editProduct(product: ProductEntity): String
     fun deleteProduct(id: UUID): String
+    fun getAllProduct(): List<ProductEntity>
 }
