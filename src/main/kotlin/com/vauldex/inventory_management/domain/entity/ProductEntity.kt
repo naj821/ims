@@ -26,7 +26,7 @@ class ProductEntity (
         @Id
         @GeneratedValue(strategy = GenerationType.UUID)
         var id: UUID? = null,
-        @ManyToOne(cascade = [CascadeType.REMOVE])
+        @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
         @JoinColumn(name = "category_id")
         var category: CategoryEntity? = null,
         @Column(name = "created_at")
