@@ -1,3 +1,5 @@
 package com.vauldex.inventory_management.domain.dto.response
 
-data class UserResponse(val email: String, val role: String)
+import java.util.UUID
+
+data class UserResponse(val email: String, val role: String, val id: UUID)

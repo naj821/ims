@@ -20,6 +20,9 @@ CREATE TABLE categories(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+INSERT INTO users(email, password, role)
+VALUES('admin@admin', 'password', 'admin');
+
 INSERT INTO categories(name)
 VALUES('Groceries');
 INSERT INTO categories(name)

@@ -20,10 +20,10 @@ class UserEntity (
         var id: UUID? = null,
 
         @Column(name = "email")
-        var email: String,
+        var email: String = "",
 
         @Column(name = "password")
-        var password: String,
+        var password: String = "",
 
         @Column(name ="role")
         var role: String = "staff",
@@ -34,5 +34,5 @@ class UserEntity (
 )
 
 {
-        fun toResponse(): UserResponse = UserResponse(email = email, role =  role)
+        fun toResponse(): UserResponse = UserResponse(email = email, role =  role, id = id!!)
 }
