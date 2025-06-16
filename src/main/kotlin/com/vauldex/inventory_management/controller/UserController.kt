@@ -17,6 +17,7 @@ class UserController(private  val userService: UserService) {
     @PostMapping
     fun create(@RequestBody user: UserCreateRequest): ResponseSuccess<UserResponse> {
        val userResponse =  userService.create(user)
+
         return ResponseSuccess(
             code = "USER_CREATED",
             status = HttpStatus.CREATED,
