@@ -16,6 +16,7 @@ class UserSessionController(private val userService: UserService) {
     @PostMapping
     fun create(@RequestBody userLogin: UserLoginRequest): ResponseSuccess<UserResponse> {
         val userResponse = userService.authenticate(userLogin)
+
         return ResponseSuccess(
             code = "USER_LOGIN",
             status = HttpStatus.CREATED,
