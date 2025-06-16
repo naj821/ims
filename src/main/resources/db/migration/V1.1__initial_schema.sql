@@ -42,7 +42,7 @@ VALUES('Bathroom Supplies');
 
 CREATE TABLE products(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    category_id UUID REFERENCES categories(id) ON DELETE CASCADE,
+    category_id UUID REFERENCES categories(id) ON DELETE NO ACTION,
     product_name VARCHAR(50) NOT NULL,
     quantity INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
