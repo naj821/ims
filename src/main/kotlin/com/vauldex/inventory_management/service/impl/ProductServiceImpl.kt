@@ -8,6 +8,7 @@ import com.vauldex.inventory_management.repository.CategoryRepository
 import com.vauldex.inventory_management.repository.ProductRepository
 import com.vauldex.inventory_management.service.abstraction.ProductService
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class ProductServiceImpl(private val productRepo: ProductRepository,
@@ -69,6 +70,19 @@ class ProductServiceImpl(private val productRepo: ProductRepository,
                     createdAt = doesExists.createdAt
                     ))
             return "Product successfully edited."
+        } catch (error: IllegalArgumentException) {
+            throw IllegalArgumentException(error.message)
+        }
+    }
+
+    override fun deleteProduct(id: UUID): String {
+        try {
+            val doesExists = productRepo.existsById(id)
+
+            if(!doesExists) throw IllegalArgumentException("Product does not exists.")
+
+            productRepo.deleteById(id)
+            return "Product successfully deleted."
         } catch (error: IllegalArgumentException) {
             throw IllegalArgumentException(error.message)
         }

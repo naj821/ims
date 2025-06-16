@@ -6,6 +6,11 @@ import com.vauldex.inventory_management.domain.dto.response.ProductResponse
 import com.vauldex.inventory_management.response.ResponseSuccess
 import com.vauldex.inventory_management.service.abstraction.ProductService
 import org.springframework.http.HttpStatus
+<<<<<<< HEAD
+=======
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
+>>>>>>> 75f9ddc (Added delete functionality)
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @RestController
 @RequestMapping("/api/products")
@@ -51,5 +57,16 @@ class ProductController(private val prodService: ProductService) {
             status = HttpStatus.OK,
             data = prod
         )
+    }
+
+    @DeleteMapping
+    fun delete(@RequestParam idProduct: UUID): ResponseSuccess<String> {
+        val prod = prodService.deleteProduct(idProduct)
+        val response = ResponseSuccess(
+                code = "PRODUCT_DELETED",
+                status = HttpStatus.OK,
+                data = prod
+        )
+        return response
     }
 }
