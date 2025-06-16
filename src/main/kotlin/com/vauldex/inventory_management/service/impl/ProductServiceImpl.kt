@@ -21,9 +21,9 @@ class ProductServiceImpl(private val productRepo: ProductRepository,
 
             val cat = categoryRepo.findByName(category)
 
-            val category = cat.id?.let { categoryRepo.getReferenceById(it) }
+            val category1 = cat.id?.let { categoryRepo.getReferenceById(it) }
 
-            return category.let { cat }
+            return category1.let { cat }
         } catch (error: IllegalArgumentException) {
             throw IllegalArgumentException(error.message)
         }
