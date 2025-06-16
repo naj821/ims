@@ -66,7 +66,7 @@ class ProductServiceImpl(private val productRepo: ProductRepository,
                     productName = product.productName,
                     quantity = product.quantity,
                     id = product.id,
-                    category = doesExists.category,
+                    category = product.category,
                     createdAt = doesExists.createdAt
                     ))
             return "Product successfully edited."
