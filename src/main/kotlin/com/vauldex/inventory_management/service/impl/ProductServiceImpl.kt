@@ -87,4 +87,14 @@ class ProductServiceImpl(private val productRepo: ProductRepository,
             throw IllegalArgumentException(error.message)
         }
     }
+
+    override fun getAllProduct(): List<ProductEntity> {
+        try {
+            val getProducts = productRepo.findAll()
+
+            return getProducts
+        } catch (error: IllegalArgumentException) {
+            throw IllegalArgumentException(error.message)
+        }
+    }
 }
