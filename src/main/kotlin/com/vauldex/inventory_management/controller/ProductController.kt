@@ -25,35 +25,34 @@ class ProductController(private val prodService: ProductService) {
     fun save(@RequestBody product: ProductRequest): ResponseSuccess<String> {
         val category = prodService.getCategoryName(category = product.category)
         val prod = prodService.save(product = product.toEntity(cat = category))
-        val response = ResponseSuccess(
-                code = "PRODUCT_SAVED",
-                status = HttpStatus.OK,
-                data = prod
+
+        return ResponseSuccess(
+            code = "PRODUCT_SAVED",
+            status = HttpStatus.OK,
+            data = prod
         )
-        return response
     }
 
     @GetMapping
     fun search(@RequestParam productName: String): ResponseSuccess<ProductResponse>{
         val prod = prodService.search(product = productName)
 
-        val response = ResponseSuccess(
-                code = "PRODUCT_FOUND",
-                status = HttpStatus.OK,
-                data = prod
-                )
-        return response
+        return ResponseSuccess(
+            code = "PRODUCT_FOUND",
+            status = HttpStatus.OK,
+            data = prod
+        )
     }
 
     @PutMapping
     fun edit(@RequestBody product: ProductEditRequest): ResponseSuccess<String> {
         val category = prodService.getCategoryName(category = product.category)
         val prod = prodService.editProduct(product = product.toEntity(cat = category))
-        val response = ResponseSuccess(
-                code = "PRODUCT_EDITED",
-                status = HttpStatus.OK,
-                data = prod
+
+        return ResponseSuccess(
+            code = "PRODUCT_EDITED",
+            status = HttpStatus.OK,
+            data = prod
         )
-        return response
     }
 }
