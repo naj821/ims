@@ -5,11 +5,8 @@ import com.vauldex.inventory_management.domain.dto.request.ProductRequest
 import com.vauldex.inventory_management.domain.dto.response.ProductResponse
 import com.vauldex.inventory_management.response.ResponseSuccess
 import com.vauldex.inventory_management.service.abstraction.ProductService
-import org.springframework.data.repository.query.Param
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
