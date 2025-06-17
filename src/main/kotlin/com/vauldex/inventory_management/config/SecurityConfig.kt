@@ -15,16 +15,20 @@ class SecuredSecurityConfig {
     @Bean
     open fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http {
+            csrf { disable() }
             securityMatcher("/api/products")
             authorizeHttpRequests {
                 authorize("/api/products", permitAll)
+                authorize("/api/products", authenticated)
             }
             formLogin {
                 loginPage = "/api/sessions"
                 loginProcessingUrl = "/api/sessions"
                 permitAll = true
             }
+
         }
+
         return http.build()
     }
 }

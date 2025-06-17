@@ -6,6 +6,7 @@ import com.vauldex.inventory_management.domain.dto.response.ProductResponse
 import com.vauldex.inventory_management.domain.entity.ProductEntity
 import com.vauldex.inventory_management.response.ResponseSuccess
 import com.vauldex.inventory_management.service.abstraction.ProductService
+import com.vauldex.inventory_management.utility.JwtUtils
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -20,10 +22,21 @@ import java.util.UUID
 
 @RestController
 @RequestMapping("/api/products")
-class ProductController(private val prodService: ProductService) {
+class ProductController(
+        private val prodService: ProductService,
+        private val jwtUtils: JwtUtils
+) {
 
     @PostMapping
-    fun save(@RequestBody product: ProductRequest): ResponseSuccess<String> {
+    fun save(
+            @RequestHeader("Authorization") authHeader: String,
+            @RequestBody product: ProductRequest
+    ): ResponseSuccess<String> {
+
+        val auth = authHeader.removePrefix("Bearer ").trim()
+
+        if(!jwtUtils.validateAccessToken(auth)) throw IllegalArgumentException("Invalid token.")
+
         val category = prodService.getCategoryName(category = product.category)
         val prod = prodService.save(product = product.toEntity(cat = category))
 
