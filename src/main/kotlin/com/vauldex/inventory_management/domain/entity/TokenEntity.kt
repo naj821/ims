@@ -18,12 +18,14 @@ class TokenEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "token_id_seq")
     @SequenceGenerator(name = "token_id_seq", sequenceName = "token_id_seq", allocationSize = 1)
-    val id: Int? = null,
+    var id: Int? = null,
+    @Column(name = "user_id")
+    var userId: UUID? = null,
     @Column(name ="hashed_access_token")
-    val hashedAccessToken: String = "",
+    var hashedAccessToken: String = "",
     @Column(name ="hashed_refresh_token")
-    val hashedRefreshToken: String = "",
+    var hashedRefreshToken: String = "",
     @Column(name = "created_at")
     @CreationTimestamp
-    val createdAt: LocalDateTime? = null
+    var createdAt: LocalDateTime? = null
 )

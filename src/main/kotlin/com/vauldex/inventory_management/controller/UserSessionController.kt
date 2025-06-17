@@ -1,6 +1,6 @@
 package com.vauldex.inventory_management.controller
 
-import com.vauldex.inventory_management.domain.dto.request.Token
+import com.vauldex.inventory_management.domain.dto.request.TokenRequest
 import com.vauldex.inventory_management.domain.dto.request.UserLoginRequest
 import com.vauldex.inventory_management.domain.dto.response.LoginResponse
 import com.vauldex.inventory_management.domain.entity.TokenEntity
@@ -31,14 +31,14 @@ class UserSessionController(
         
         val refreshToken = jwtUtils.generateRefreshToken(userId = userResponse.id.toString())
 
-        val authToken = Token(
+        val authTokenRequest = TokenRequest(
+                id = userResponse.id,
                 hashedAccessToken = accessToken,
                 hashedRefreshToken = refreshToken
         )
+        authenticationService.saveTokens(authTokenRequest.toEntity())
 
-        saveToken(token = authToken.toEntity())
-
-        val loginResponse = LoginResponse(userResponse = userResponse, authorization = authToken)
+        val loginResponse = LoginResponse(userResponse = userResponse, authorization = authTokenRequest)
 
         return ResponseSuccess(
             code = "USER_LOGIN",
@@ -46,7 +46,17 @@ class UserSessionController(
             data = loginResponse
         )
     }
-    fun saveToken(token: TokenEntity): Unit {
-        authenticationService.saveTokens(token)
+
+    @PostMapping("/refresh")
+    fun refreshToken(@RequestBody refreshTokenRequest: TokenRequest): ResponseSuccess<TokenEntity> {
+        val data = authenticationService.refresh(refreshTokenRequest)
+
+        val response = ResponseSuccess(code = "REFRESH_TOKEN",
+                status = HttpStatus.CREATED,
+                data = data
+        )
+
+        return response
     }
+
 }

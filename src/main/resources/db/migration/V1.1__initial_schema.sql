@@ -50,6 +50,7 @@ CREATE TABLE products(
 
 CREATE TABLE token(
 id SERIAL PRIMARY KEY,
+user_id UUID,
 hashed_access_token VARCHAR(255) NOT NULL,
 hashed_refresh_token VARCHAR(255) NOT NULL,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
