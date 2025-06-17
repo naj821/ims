@@ -2,22 +2,25 @@ package com.vauldex.inventory_management.service.impl
 
 import com.vauldex.inventory_management.domain.dto.request.UserCreateRequest
 import com.vauldex.inventory_management.domain.dto.request.UserLoginRequest
-import com.vauldex.inventory_management.domain.dto.request.UserResquest
 import com.vauldex.inventory_management.domain.dto.response.UserResponse
-import com.vauldex.inventory_management.domain.entity.UserEntity
 import com.vauldex.inventory_management.repository.UserRepository
 import com.vauldex.inventory_management.service.abstraction.UserService
+import com.vauldex.inventory_management.utility.HashEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class UserServiceImpl(private val userRepo: UserRepository): UserService {
+class UserServiceImpl(private val userRepo: UserRepository, private val hash: HashEncoder): UserService {
     override fun authenticate(user: UserLoginRequest): UserResponse {
         try {
-            val doesExists = userRepo.existsByEmailAndPassword(email = user.email, password = user.password)
+            val doesExists = userRepo.existsByEmail(email = user.email)
+            if(!doesExists) throw IllegalArgumentException("Invalid Credentials.")
 
-            if(!doesExists) throw IllegalArgumentException("Invalid Credentials")
+            val storedUser = userRepo.findByEmail(email = user.email)
 
-            val userResponse = userRepo.findByEmailAndPassword(email = user.email, password = user.password)
+            val passwordMatches = hash.decode(user.password, storedUser.password)
+            if(!passwordMatches) throw IllegalArgumentException("Invalid Credentials.")
+
+            val userResponse = userRepo.findByEmail(email = user.email)
             return userResponse.toResponse()
         } catch (error: IllegalArgumentException) {
             throw IllegalArgumentException(error.message)

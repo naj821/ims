@@ -1,7 +1,7 @@
 CREATE TABLE users(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email VARCHAR(50) NOT NULL,
-    password VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     role VARCHAR(5) DEFAULT 'staff',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -21,7 +21,7 @@ CREATE TABLE categories(
 );
 
 INSERT INTO users(email, password, role)
-VALUES('admin@admin', 'password', 'admin');
+VALUES('admin@admin', '$2a$12$qn1UBdsHq9aGZlLVVRo8Pu2u1VN5nGNtZLpNRlIlGAZEUFJSmIEBy', 'admin');
 
 INSERT INTO categories(name)
 VALUES('Groceries');
@@ -46,4 +46,11 @@ CREATE TABLE products(
     product_name VARCHAR(50) NOT NULL,
     quantity INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE refresh_token(
+id INT GENERATED ALWAYS AS IDENTITY,
+hash_token VARCHAR(255) NOT NULL,
+expires_at TIMESTAMP,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -6,7 +6,6 @@ import com.vauldex.inventory_management.domain.dto.response.ProductResponse
 import com.vauldex.inventory_management.domain.entity.ProductEntity
 import com.vauldex.inventory_management.response.ResponseSuccess
 import com.vauldex.inventory_management.service.abstraction.ProductService
-import org.apache.coyote.Response
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
