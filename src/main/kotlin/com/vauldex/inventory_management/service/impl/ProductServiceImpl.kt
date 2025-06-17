@@ -1,6 +1,5 @@
 package com.vauldex.inventory_management.service.impl
 
-import com.vauldex.inventory_management.domain.dto.request.ProductEditRequest
 import com.vauldex.inventory_management.domain.dto.response.ProductResponse
 import com.vauldex.inventory_management.domain.entity.CategoryEntity
 import com.vauldex.inventory_management.domain.entity.ProductEntity
@@ -52,7 +51,7 @@ class ProductServiceImpl(private val productRepo: ProductRepository,
             val prod = productRepo.findByProductName(product)
             return prod.toResponse()
         } catch (error: IllegalArgumentException) {
-            throw IllegalArgumentException("This error: ${error.message}")
+            throw IllegalArgumentException(error.message)
         }
     }
 

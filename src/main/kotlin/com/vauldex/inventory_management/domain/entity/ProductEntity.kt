@@ -35,6 +35,6 @@ class ProductEntity (
 )
 
 {
-        fun toResponse(): ProductResponse = ProductResponse(productName = productName, quantity = quantity)
+        fun toResponse(): ProductResponse = ProductResponse(productName = productName, quantity = quantity, id = id!!)
 
 }
