@@ -21,7 +21,7 @@ CREATE TABLE categories(
 );
 
 INSERT INTO users(email, password, role)
-VALUES('admin@admin', '$2a$12$qn1UBdsHq9aGZlLVVRo8Pu2u1VN5nGNtZLpNRlIlGAZEUFJSmIEBy', 'admin');
+VALUES('admin@gmail.com', '$2a$10$B9OK8YBcNWc0MtK7wqH.6eHEgBIDDXXBy36HGUohvvS.rhfew6VSe', 'admin');
 
 INSERT INTO categories(name)
 VALUES('Groceries');
