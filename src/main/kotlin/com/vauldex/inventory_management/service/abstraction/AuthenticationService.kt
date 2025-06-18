@@ -8,6 +8,5 @@ import java.util.UUID
 interface AuthenticationService {
     fun saveTokens(token: TokenEntity): Unit
     fun validateAccessToken(token: String): Unit
-    fun validateRefreshToken(token: String): Boolean = false
     fun refresh(jwt: String): String
 }

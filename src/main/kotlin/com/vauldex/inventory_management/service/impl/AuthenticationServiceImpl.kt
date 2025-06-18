@@ -29,13 +29,6 @@ class AuthenticationServiceImpl(
         if(!tokenMatches) throw IllegalArgumentException("Invalid token.")
     }
 
-    override fun validateRefreshToken(token: String): Boolean {
-        val tokenMatches = jwtUtils.validateRefreshToken(token)
-        if(!tokenMatches) throw IllegalArgumentException("Invalid token.")
-
-        return true
-    }
-
     @Transactional
     override fun refresh(jwt: String): String {
         try {

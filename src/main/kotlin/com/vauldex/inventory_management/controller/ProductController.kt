@@ -53,8 +53,6 @@ class ProductController(
             @CookieValue("jwt") jwt: String
     ): ResponseSuccess<ProductResponse>{
 
-//        val auth = authHeader.removePrefix("Bearer ").trim()
-
         authService.validateAccessToken(jwt)
 
         val prod = prodService.search(product = productName)
