@@ -19,7 +19,7 @@ class UserController(private  val userService: UserService, private val hash: Ha
     fun create(@RequestBody user: UserCreateRequest): ResponseSuccess<UserResponse> {
         val hashPassword = hash.encode(user.password)
         val hashUserPassword = UserCreateRequest(email = user.email, password = hashPassword)
-       val userResponse =  userService.create(hashUserPassword)
+        val userResponse =  userService.create(hashUserPassword)
 
         return ResponseSuccess(
             code = "USER_CREATED",
