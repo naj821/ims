@@ -9,6 +9,7 @@ import com.vauldex.inventory_management.service.abstraction.AuthenticationServic
 import com.vauldex.inventory_management.service.abstraction.ProductService
 import com.vauldex.inventory_management.utility.JwtUtils
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.CookieValue
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -25,19 +26,18 @@ import java.util.UUID
 @RequestMapping("/api/products")
 class ProductController(
         private val prodService: ProductService,
-        private val authService: AuthenticationService,
-        private val jwtUtils: JwtUtils
+        private val authService: AuthenticationService
 ) {
 
     @PostMapping
     fun save(
-            @RequestHeader("Authorization") authHeader: String,
+            @CookieValue("jwt") jwt: String,
             @RequestBody product: ProductRequest
     ): ResponseSuccess<String> {
 
-        val auth = authHeader.removePrefix("Bearer ").trim()
+//        val auth = authHeader.removePrefix("Bearer ").trim()
 
-        authService.validateAccessToken(auth)
+        authService.validateAccessToken(jwt)
 
         val category = prodService.getCategoryName(category = product.category)
         val prod = prodService.save(product = product.toEntity(cat = category))
@@ -52,12 +52,12 @@ class ProductController(
     @GetMapping("/{productName}")
     fun search(
             @PathVariable productName: String,
-            @RequestHeader("Authorization") authHeader: String
+            @CookieValue("jwt") jwt: String
     ): ResponseSuccess<ProductResponse>{
 
-        val auth = authHeader.removePrefix("Bearer ").trim()
+//        val auth = authHeader.removePrefix("Bearer ").trim()
 
-        authService.validateAccessToken(auth)
+        authService.validateAccessToken(jwt)
 
         val prod = prodService.search(product = productName)
 
@@ -71,12 +71,12 @@ class ProductController(
     @PutMapping
     fun edit(
             @RequestBody product: ProductEditRequest,
-            @RequestHeader("Authorization") authHeader: String
+            @CookieValue("jwt") jwt: String
     ): ResponseSuccess<String> {
 
-        val auth = authHeader.removePrefix("Bearer ").trim()
+//        val auth = authHeader.removePrefix("Bearer ").trim()
 
-        authService.validateAccessToken(auth)
+        authService.validateAccessToken(jwt)
 
         val category = prodService.getCategoryName(category = product.category)
         val prod = prodService.editProduct(product = product.toEntity(cat = category))
@@ -91,12 +91,12 @@ class ProductController(
     @DeleteMapping
     fun delete(
             @RequestParam idProduct: UUID,
-            @RequestHeader("Authorization") authHeader: String
+            @CookieValue("jwt") jwt: String
     ): ResponseSuccess<String> {
 
-        val auth = authHeader.removePrefix("Bearer ").trim()
+//        val auth = authHeader.removePrefix("Bearer ").trim()
 
-        authService.validateAccessToken(auth)
+        authService.validateAccessToken(jwt)
 
         val prod = prodService.deleteProduct(idProduct)
         val response = ResponseSuccess(
@@ -108,10 +108,12 @@ class ProductController(
     }
 
     @GetMapping
-    fun get(@RequestHeader("Authorization") authHeader: String): ResponseSuccess<List<ProductEntity>> {
-        val auth = authHeader.removePrefix("Bearer ").trim()
+    fun get(@CookieValue("jwt") jwt: String): ResponseSuccess<List<ProductEntity>> {
+//        val auth = authHeader.removePrefix("Bearer ").trim()
 
-        authService.validateAccessToken(auth)
+        authService.validateAccessToken(jwt)
+
+
 
         val productResponse = prodService.getAllProduct()
 
