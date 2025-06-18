@@ -7,6 +7,7 @@ import com.vauldex.inventory_management.repository.UserRepository
 import com.vauldex.inventory_management.service.abstraction.UserService
 import com.vauldex.inventory_management.utility.HashEncoder
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class UserServiceImpl(private val userRepo: UserRepository, private val hash: HashEncoder): UserService {
@@ -35,6 +36,18 @@ class UserServiceImpl(private val userRepo: UserRepository, private val hash: Ha
 
             val userResponse = userRepo.save(user.toEntity())
             return userResponse.toResponse()
+        } catch (error: IllegalArgumentException) {
+            throw IllegalArgumentException(error.message)
+        }
+    }
+
+    override fun find(idUser: UUID): UserResponse {
+        try {
+            val doesUserExist = userRepo.findById(idUser).orElse(null)
+
+            if(doesUserExist == null) throw IllegalArgumentException("User not exist")
+
+            return doesUserExist.toResponse()
         } catch (error: IllegalArgumentException) {
             throw IllegalArgumentException(error.message)
         }
