@@ -3,6 +3,7 @@ package com.vauldex.inventory_management.exception.core
 import io.jsonwebtoken.ExpiredJwtException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MissingRequestCookieException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
@@ -24,6 +25,16 @@ class GlobalExceptionHandler {
                 code = ex.message,
                 status = HttpStatus.UNAUTHORIZED
         )
+        return ResponseEntity(errorMsg, HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(MissingRequestCookieException::class)
+    fun handleMissingRequestCookie(ex: MissingRequestCookieException): ResponseEntity<MissingRequestExceptionModel> {
+        val errorMsg = MissingRequestExceptionModel(
+                code = ex.message,
+                status = HttpStatus.UNAUTHORIZED
+        )
+
         return ResponseEntity(errorMsg, HttpStatus.BAD_REQUEST)
     }
 }

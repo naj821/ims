@@ -11,5 +11,5 @@ interface UserService {
     fun authenticate(user: UserLoginRequest): LoginResponse
     fun create(user: UserCreateRequest): UserResponse
     fun find(idUser: UUID): UserResponse
-    fun logout(token: TokenRequest): String
+    fun logout(token: String): Unit
 }

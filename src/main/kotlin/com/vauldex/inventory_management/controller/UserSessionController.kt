@@ -1,9 +1,7 @@
 package com.vauldex.inventory_management.controller
 
-import com.vauldex.inventory_management.domain.dto.request.TokenRequest
 import com.vauldex.inventory_management.domain.dto.request.UserLoginRequest
 import com.vauldex.inventory_management.domain.dto.response.UserResponse
-import com.vauldex.inventory_management.domain.entity.TokenEntity
 import com.vauldex.inventory_management.response.ResponseSuccess
 import com.vauldex.inventory_management.service.abstraction.AuthenticationService
 import com.vauldex.inventory_management.service.abstraction.UserService
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.web.bind.annotation.CookieValue
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import java.util.UUID
 
@@ -71,6 +70,17 @@ class UserSessionController(
             code = "USER_FOUND",
             status = HttpStatus.OK,
             data = userResponse
+        )
+    }
+
+    @DeleteMapping
+    fun delete(@CookieValue("jwt") jwt: String): ResponseSuccess<Unit> {
+        val data = userService.logout(jwt)
+
+        return ResponseSuccess(
+                code = "USER_LOGOUT",
+                status = HttpStatus.OK,
+                data = data
         )
     }
 

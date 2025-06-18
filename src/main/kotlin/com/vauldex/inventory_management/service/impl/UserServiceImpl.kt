@@ -13,14 +13,15 @@ import com.vauldex.inventory_management.utility.HashEncoder
 import com.vauldex.inventory_management.utility.JwtUtils
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.MissingRequestCookieException
 import java.util.UUID
 
 @Service
 class UserServiceImpl(
         private val userRepo: UserRepository,
         private val hash: HashEncoder,
-        private  val tokenRepository: TokenRepository,
         private val jwtUtils: JwtUtils,
+        private val tokenRepository: TokenRepository,
         private val authenticationService: AuthenticationService
 ): UserService {
     override fun authenticate(user: UserLoginRequest): LoginResponse {
@@ -78,15 +79,17 @@ class UserServiceImpl(
     }
 
     @Transactional
-    override fun logout(token: TokenRequest): String {
+     override fun logout(token: String): Unit {
         try {
-            val doesExists = tokenRepository.existsByHashedRefreshToken(token.hashedRefreshToken)
-            if(!doesExists) throw IllegalArgumentException("Invalid token.")
+            val validToken = jwtUtils.validateAccessToken(token)
+            if(!validToken) throw IllegalArgumentException("Invalid token.")
 
-           val response = tokenRepository.deleteByUserId(token.id)
-            return response
-        }catch (error: IllegalArgumentException) {
-            throw IllegalArgumentException(error.message)
+            val id = jwtUtils.getUserIdFromToken(token)
+            val userId = UUID.fromString(id)
+
+           tokenRepository.deleteByUserId(userId)
+        }catch (error: MissingRequestCookieException) {
+            throw error
         }
     }
 }
