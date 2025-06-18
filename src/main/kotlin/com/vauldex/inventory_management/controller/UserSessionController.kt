@@ -44,14 +44,19 @@ class UserSessionController(
     }
 
     @PostMapping("/refresh")
-    fun refreshToken(@RequestBody refreshTokenRequest: TokenRequest): ResponseSuccess<TokenEntity> {
-        val data = authService.refresh(refreshTokenRequest)
+    fun refresh(@CookieValue("jwt") jwt: String, response: HttpServletResponse) : ResponseSuccess<Unit> {
+        val data = authService.refresh(jwt)
 
-        val response = ResponseSuccess(code = "REFRESH_TOKEN",
+        val cookie = Cookie("jwt", data)
+        cookie.isHttpOnly = true
+
+        response.addCookie(cookie)
+
+        val response = ResponseSuccess(
+                code = "REFRESH_TOKEN",
                 status = HttpStatus.CREATED,
-                data = data
+                data = Unit
         )
-
         return response
     }
 

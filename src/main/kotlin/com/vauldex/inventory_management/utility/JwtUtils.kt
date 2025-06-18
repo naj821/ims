@@ -1,11 +1,11 @@
 package com.vauldex.inventory_management.utility
 
 import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import java.util.Base64
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.security.SignatureAlgorithm
 import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
@@ -44,9 +44,9 @@ class JwtUtils(
     }
 
     fun validateAccessToken(token: String): Boolean {
-        val claims = parseAllClaims(token) ?: return false
-        val tokenType = claims["type"] as? String ?: return false
-        return tokenType == "access"
+            val claims = parseAllClaims(token) ?: return false
+            val tokenType = claims["type"] as? String ?: return false
+            return tokenType == "access"
     }
 
     fun validateRefreshToken(token: String): Boolean {
@@ -73,8 +73,8 @@ class JwtUtils(
                     .build()
                     .parseSignedClaims(rawToken)
                     .payload
-        } catch (e: IllegalArgumentException) {
-            throw IllegalArgumentException(e.message)
+        } catch (e: ExpiredJwtException) {
+            return null
         }
     }
 }

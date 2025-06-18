@@ -1,6 +1,5 @@
 package com.vauldex.inventory_management.service.impl
 
-import com.vauldex.inventory_management.domain.dto.request.TokenRequest
 import com.vauldex.inventory_management.domain.entity.TokenEntity
 import com.vauldex.inventory_management.repository.TokenRepository
 import com.vauldex.inventory_management.service.abstraction.AuthenticationService
@@ -19,7 +18,7 @@ class AuthenticationServiceImpl(
                 hashedRefreshToken = token.hashedRefreshToken
         )
 
-        if(doesExist) throw IllegalArgumentException("Token already exists.")
+        if(doesExist) throw IllegalArgumentException("You are already logged in.")
 
         tokenRepo.saveAndFlush(token)
         return
@@ -36,43 +35,34 @@ class AuthenticationServiceImpl(
 
         return true
     }
+
     @Transactional
-    override fun refresh(tokenRequest: TokenRequest): TokenEntity {
+    override fun refresh(jwt: String): String {
         try {
-            val validAccessToken = jwtUtils.validateAccessToken(tokenRequest.hashedAccessToken)
+            val session = tokenRepo.existsByHashedAccessToken(jwt)
+            if(!session) throw IllegalArgumentException("Invalid token.")
 
-            val doesExists = tokenRepo.existsByHashedRefreshToken(tokenRequest.hashedRefreshToken)
-            if(!doesExists) throw IllegalArgumentException("Invalid token.")
+            val tokenData = tokenRepo.findByHashedAccessToken(token = jwt)
+            val accessToken = tokenData.hashedAccessToken
+            val refreshToken = tokenData.hashedRefreshToken
 
-            val response = tokenRepo.findByHashedRefreshToken(tokenRequest.hashedRefreshToken)
+            val validAccessToken = jwtUtils.validateAccessToken(accessToken)
+            if(validAccessToken) return accessToken
 
-            if(validAccessToken) {
-                val tokenEntity = TokenEntity(
-                        id = response.id,
-                        userId = tokenRequest.id,
-                        hashedAccessToken = tokenRequest.hashedAccessToken,
-                        hashedRefreshToken = tokenRequest.hashedRefreshToken,
-                        createdAt = response.createdAt
-                )
-                return tokenEntity
-            }
+            val validRefreshToken = jwtUtils.validateRefreshToken(refreshToken)
+            if(!validRefreshToken) throw IllegalArgumentException("You are not logged in.")
 
-            val validToken = jwtUtils.validateRefreshToken(tokenRequest.hashedRefreshToken)
-            if(!validToken) throw IllegalArgumentException("Invalid token.")
-
-            val newAccessToken = jwtUtils.generateAccessToken(response.userId.toString())
-
+            val newAccessToken = jwtUtils.generateAccessToken(tokenData.userId.toString())
             val tokenEntity = TokenEntity(
-                    id = response.id,
-                    userId = response.userId,
-                    hashedAccessToken = newAccessToken,
-                    hashedRefreshToken = response.hashedRefreshToken,
-                    createdAt = response.createdAt
-            )
-
+                        id = tokenData.id,
+                        userId = tokenData.userId,
+                        hashedAccessToken = newAccessToken,
+                        hashedRefreshToken = refreshToken,
+                        createdAt = tokenData.createdAt
+                )
             saveTokens(tokenEntity)
 
-            return tokenEntity
+            return newAccessToken
         } catch (e: IllegalArgumentException) {
             throw IllegalArgumentException(e.message)
         }

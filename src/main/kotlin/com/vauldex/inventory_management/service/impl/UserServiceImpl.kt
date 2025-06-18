@@ -33,18 +33,16 @@ class UserServiceImpl(
             val passwordMatches = hash.decode(user.password, storedUser.password)
             if(!passwordMatches) throw IllegalArgumentException("Invalid Credentials.")
 
-            val userResult = userRepo.findByEmail(email = user.email)
-
-            val accessToken = jwtUtils.generateAccessToken(userId = userResult.id.toString())
-            val refreshToken = jwtUtils.generateRefreshToken(userId = userResult.id.toString())
+            val accessToken = jwtUtils.generateAccessToken(userId = storedUser.id.toString())
+            val refreshToken = jwtUtils.generateRefreshToken(userId = storedUser.id.toString())
 
             val authTokenRequest = TokenRequest(
-                    id = userResult.id!!,
+                    id = storedUser.id!!,
                     hashedAccessToken = accessToken,
                     hashedRefreshToken = refreshToken
             )
             authenticationService.saveTokens(authTokenRequest.toEntity())
-            val userResponse = userResult.toResponse()
+            val userResponse = storedUser.toResponse()
 
             val loginResponse = LoginResponse(userResponse = userResponse, authorization = authTokenRequest)
 

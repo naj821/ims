@@ -35,8 +35,6 @@ class ProductController(
             @RequestBody product: ProductRequest
     ): ResponseSuccess<String> {
 
-//        val auth = authHeader.removePrefix("Bearer ").trim()
-
         authService.validateAccessToken(jwt)
 
         val category = prodService.getCategoryName(category = product.category)
@@ -74,8 +72,6 @@ class ProductController(
             @CookieValue("jwt") jwt: String
     ): ResponseSuccess<String> {
 
-//        val auth = authHeader.removePrefix("Bearer ").trim()
-
         authService.validateAccessToken(jwt)
 
         val category = prodService.getCategoryName(category = product.category)
@@ -94,8 +90,6 @@ class ProductController(
             @CookieValue("jwt") jwt: String
     ): ResponseSuccess<String> {
 
-//        val auth = authHeader.removePrefix("Bearer ").trim()
-
         authService.validateAccessToken(jwt)
 
         val prod = prodService.deleteProduct(idProduct)
@@ -109,11 +103,8 @@ class ProductController(
 
     @GetMapping
     fun get(@CookieValue("jwt") jwt: String): ResponseSuccess<List<ProductEntity>> {
-//        val auth = authHeader.removePrefix("Bearer ").trim()
 
         authService.validateAccessToken(jwt)
-
-
 
         val productResponse = prodService.getAllProduct()
 
