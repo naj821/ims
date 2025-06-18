@@ -32,6 +32,9 @@ class UserSessionController(
 
         val cookie = Cookie("jwt", accessToken)
         cookie.isHttpOnly = true
+        cookie.secure = true
+        cookie.path = "/"
+        cookie.maxAge = 15 * 60 
 
         response.addCookie(cookie)
 
@@ -60,7 +63,9 @@ class UserSessionController(
     }
 
     @GetMapping
-    fun find(@CookieValue("jwt") jwt: String): ResponseSuccess<UserResponse> {
+    fun find(@CookieValue("jwt") jwt: String?): ResponseSuccess<UserResponse> {
+        if(jwt == null) throw IllegalArgumentException("Invalid token.")
+
         authService.validateAccessToken(jwt)
 
         val userId = jwtUtils.getUserIdFromToken(jwt)
