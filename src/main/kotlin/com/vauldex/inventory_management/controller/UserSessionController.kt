@@ -25,20 +25,7 @@ class UserSessionController(
 ) {
     @PostMapping
     fun create(@RequestBody userLogin: UserLoginRequest): ResponseSuccess<LoginResponse> {
-        val userResponse = userService.authenticate(userLogin)
-        
-        val accessToken = jwtUtils.generateAccessToken(userId = userResponse.id.toString())
-        
-        val refreshToken = jwtUtils.generateRefreshToken(userId = userResponse.id.toString())
-
-        val authTokenRequest = TokenRequest(
-                id = userResponse.id,
-                hashedAccessToken = accessToken,
-                hashedRefreshToken = refreshToken
-        )
-        authenticationService.saveTokens(authTokenRequest.toEntity())
-
-        val loginResponse = LoginResponse(userResponse = userResponse, authorization = authTokenRequest)
+        val loginResponse = userService.authenticate(userLogin)
 
         return ResponseSuccess(
             code = "USER_LOGIN",
@@ -51,11 +38,24 @@ class UserSessionController(
     fun refreshToken(@RequestBody refreshTokenRequest: TokenRequest): ResponseSuccess<TokenEntity> {
         val data = authenticationService.refresh(refreshTokenRequest)
 
-        val response = ResponseSuccess(code = "REFRESH_TOKEN",
+        val response = ResponseSuccess(
+                code = "REFRESH_TOKEN",
                 status = HttpStatus.CREATED,
                 data = data
         )
 
+        return response
+    }
+
+    @PostMapping("/logout")
+    fun logout(@RequestBody tokens: TokenRequest): ResponseSuccess<String> {
+        val data = userService.logout(tokens)
+
+        val response = ResponseSuccess(
+                code = "USER_LOGOUT",
+                status = HttpStatus.OK,
+                data = data
+        )
         return response
     }
 

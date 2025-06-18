@@ -57,8 +57,6 @@ class AuthenticationServiceImpl(
             val validToken = jwtUtils.validateRefreshToken(tokenRequest.hashedRefreshToken)
             if(!validToken) throw IllegalArgumentException("Invalid token.")
 
-
-
             val newAccessToken = jwtUtils.generateAccessToken(response.userId.toString())
 
             val tokenEntity = TokenEntity(

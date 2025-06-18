@@ -9,4 +9,5 @@ interface TokenRepository: JpaRepository<TokenEntity, String>{
     fun existsByHashedAccessTokenAndHashedRefreshToken(hashedAccessToken: String, hashedRefreshToken: String): Boolean
     fun existsByHashedRefreshToken(refreshToken: String): Boolean
     fun findByHashedRefreshToken(refreshToken: String): TokenEntity
+    fun deleteByHashedRefreshToken(refreshToken: String): String
 }
