@@ -1,17 +1,29 @@
 package com.vauldex.inventory_management.service.impl
 
+import com.vauldex.inventory_management.domain.dto.request.TokenRequest
 import com.vauldex.inventory_management.domain.dto.request.UserCreateRequest
 import com.vauldex.inventory_management.domain.dto.request.UserLoginRequest
+import com.vauldex.inventory_management.domain.dto.response.LoginResponse
 import com.vauldex.inventory_management.domain.dto.response.UserResponse
+import com.vauldex.inventory_management.repository.TokenRepository
 import com.vauldex.inventory_management.repository.UserRepository
+import com.vauldex.inventory_management.service.abstraction.AuthenticationService
 import com.vauldex.inventory_management.service.abstraction.UserService
 import com.vauldex.inventory_management.utility.HashEncoder
+import com.vauldex.inventory_management.utility.JwtUtils
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
-class UserServiceImpl(private val userRepo: UserRepository, private val hash: HashEncoder): UserService {
-    override fun authenticate(user: UserLoginRequest): UserResponse {
+class UserServiceImpl(
+        private val userRepo: UserRepository,
+        private val hash: HashEncoder,
+        private  val tokenRepository: TokenRepository,
+        private val jwtUtils: JwtUtils,
+        private val authenticationService: AuthenticationService
+): UserService {
+    override fun authenticate(user: UserLoginRequest): LoginResponse {
         try {
             val doesExists = userRepo.existsByEmail(email = user.email)
             if(!doesExists) throw IllegalArgumentException("Invalid Credentials.")
@@ -21,8 +33,22 @@ class UserServiceImpl(private val userRepo: UserRepository, private val hash: Ha
             val passwordMatches = hash.decode(user.password, storedUser.password)
             if(!passwordMatches) throw IllegalArgumentException("Invalid Credentials.")
 
-            val userResponse = userRepo.findByEmail(email = user.email)
-            return userResponse.toResponse()
+            val userResult = userRepo.findByEmail(email = user.email)
+
+            val accessToken = jwtUtils.generateAccessToken(userId = userResult.id.toString())
+            val refreshToken = jwtUtils.generateRefreshToken(userId = userResult.id.toString())
+
+            val authTokenRequest = TokenRequest(
+                    id = userResult.id!!,
+                    hashedAccessToken = accessToken,
+                    hashedRefreshToken = refreshToken
+            )
+            authenticationService.saveTokens(authTokenRequest.toEntity())
+            val userResponse = userResult.toResponse()
+
+            val loginResponse = LoginResponse(userResponse = userResponse, authorization = authTokenRequest)
+
+            return loginResponse
         } catch (error: IllegalArgumentException) {
             throw IllegalArgumentException(error.message)
         }
@@ -49,6 +75,19 @@ class UserServiceImpl(private val userRepo: UserRepository, private val hash: Ha
 
             return doesUserExist.toResponse()
         } catch (error: IllegalArgumentException) {
+            throw IllegalArgumentException(error.message)
+        }
+    }
+
+    @Transactional
+    override fun logout(token: TokenRequest): String {
+        try {
+            val doesExists = tokenRepository.existsByHashedRefreshToken(token.hashedRefreshToken)
+            if(!doesExists) throw IllegalArgumentException("Invalid token.")
+
+           val response = tokenRepository.deleteByUserId(token.id)
+            return response
+        }catch (error: IllegalArgumentException) {
             throw IllegalArgumentException(error.message)
         }
     }

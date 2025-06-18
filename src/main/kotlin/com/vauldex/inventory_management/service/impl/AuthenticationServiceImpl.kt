@@ -6,6 +6,7 @@ import com.vauldex.inventory_management.repository.TokenRepository
 import com.vauldex.inventory_management.service.abstraction.AuthenticationService
 import com.vauldex.inventory_management.utility.JwtUtils
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class AuthenticationServiceImpl(
@@ -35,29 +36,29 @@ class AuthenticationServiceImpl(
 
         return true
     }
-
+    @Transactional
     override fun refresh(tokenRequest: TokenRequest): TokenEntity {
         try {
+            val validAccessToken = jwtUtils.validateAccessToken(tokenRequest.hashedAccessToken)
+
             val doesExists = tokenRepo.existsByHashedRefreshToken(tokenRequest.hashedRefreshToken)
             if(!doesExists) throw IllegalArgumentException("Invalid token.")
 
-            val validAccessToken = jwtUtils.validateAccessToken(tokenRequest.hashedAccessToken)
-
             val response = tokenRepo.findByHashedRefreshToken(tokenRequest.hashedRefreshToken)
+
             if(validAccessToken) {
                 val tokenEntity = TokenEntity(
                         id = response.id,
                         userId = tokenRequest.id,
                         hashedAccessToken = tokenRequest.hashedAccessToken,
                         hashedRefreshToken = tokenRequest.hashedRefreshToken,
-                        createdAt = response.createdAt)
+                        createdAt = response.createdAt
+                )
                 return tokenEntity
             }
 
             val validToken = jwtUtils.validateRefreshToken(tokenRequest.hashedRefreshToken)
             if(!validToken) throw IllegalArgumentException("Invalid token.")
-
-
 
             val newAccessToken = jwtUtils.generateAccessToken(response.userId.toString())
 
