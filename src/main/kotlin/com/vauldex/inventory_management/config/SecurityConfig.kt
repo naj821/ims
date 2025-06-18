@@ -27,7 +27,7 @@ class SecuredSecurityConfig {
                 permitAll = true
             }
             logout {
-                logoutUrl = "/api/sessions"
+                logoutUrl = "/api/sessions/logout"
                 logoutSuccessUrl = "/api/sessions"
             }
 

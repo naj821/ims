@@ -11,6 +11,7 @@ import com.vauldex.inventory_management.service.abstraction.AuthenticationServic
 import com.vauldex.inventory_management.service.abstraction.UserService
 import com.vauldex.inventory_management.utility.HashEncoder
 import com.vauldex.inventory_management.utility.JwtUtils
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
@@ -65,13 +66,14 @@ class UserServiceImpl(
         }
     }
 
+    @Transactional
     override fun logout(token: TokenRequest): String {
         try {
             val doesExists = tokenRepository.existsByHashedRefreshToken(token.hashedRefreshToken)
             if(!doesExists) throw IllegalArgumentException("Invalid token.")
 
-            tokenRepository.deleteByHashedRefreshToken(token.hashedRefreshToken)
-            return "Logout successfully."
+           val response = tokenRepository.deleteByUserId(token.id)
+            return response
         }catch (error: IllegalArgumentException) {
             throw IllegalArgumentException(error.message)
         }

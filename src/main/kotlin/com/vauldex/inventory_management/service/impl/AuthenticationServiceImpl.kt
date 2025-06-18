@@ -6,6 +6,7 @@ import com.vauldex.inventory_management.repository.TokenRepository
 import com.vauldex.inventory_management.service.abstraction.AuthenticationService
 import com.vauldex.inventory_management.utility.JwtUtils
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class AuthenticationServiceImpl(
@@ -35,7 +36,7 @@ class AuthenticationServiceImpl(
 
         return true
     }
-
+    @Transactional
     override fun refresh(tokenRequest: TokenRequest): TokenEntity {
         try {
             val validAccessToken = jwtUtils.validateAccessToken(tokenRequest.hashedAccessToken)
