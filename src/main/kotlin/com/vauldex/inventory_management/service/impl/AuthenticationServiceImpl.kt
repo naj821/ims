@@ -26,7 +26,7 @@ class AuthenticationServiceImpl(
 
     override fun validateAccessToken(token: String): Unit {
         val validToken = jwtUtils.validateAccessToken(token)
-        if(!validToken) throw IllegalArgumentException("Invalid token.")
+        if(!validToken) throw IllegalArgumentException("Invalid token.2")
     }
 
     @Transactional
