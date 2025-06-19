@@ -17,7 +17,7 @@ class ProductServiceImpl(private val productRepo: ProductRepository,
         try {
             val doesExists = categoryRepo.existsByName(category)
 
-            if(!doesExists) throw IllegalArgumentException("Category does not exists.")
+            if(!doesExists) throw IllegalArgumentException("CATEGORY_NOT_FOUND")
 
             val cat = categoryRepo.findByName(category)
 
@@ -33,7 +33,7 @@ class ProductServiceImpl(private val productRepo: ProductRepository,
         try{
             val doesExists = productRepo.existsByProductName(product.productName)
 
-            if (doesExists) throw IllegalArgumentException("Product already exists.")
+            if (doesExists) throw IllegalArgumentException("PRODUCT_EXISTS")
 
             productRepo.saveAndFlush(product)
             return "Product saved."
@@ -46,7 +46,7 @@ class ProductServiceImpl(private val productRepo: ProductRepository,
         try {
             val doesExists = productRepo.existsByProductName(product)
 
-            if (!doesExists) throw IllegalArgumentException("No product found.")
+            if (!doesExists) throw IllegalArgumentException("PRODUCT_NOT_FOUND")
 
             val prod = productRepo.findByProductName(product)
             return prod.toResponse()
@@ -59,7 +59,7 @@ class ProductServiceImpl(private val productRepo: ProductRepository,
         try{
             val doesExists = productRepo.findById(product.id!!).orElse(null)
 
-            if (doesExists == null) throw IllegalArgumentException("Product does not exists.")
+            if (doesExists == null) throw IllegalArgumentException("PRODUCT_NOT_FOUND")
 
             productRepo.saveAndFlush(ProductEntity(
                     productName = product.productName,

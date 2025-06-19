@@ -1,7 +1,6 @@
 package com.vauldex.inventory_management.domain.entity
 
 import com.vauldex.inventory_management.domain.dto.response.ProductResponse
-import com.vauldex.inventory_management.domain.dto.response.UserResponse
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -21,7 +20,7 @@ class ProductEntity (
         @Column(name = "product_name")
         var productName: String = "",
         @Column(name = "quantity")
-        var quantity: Int = 0,
+        var quantity: Long = 0,
         @Column(name = "id")
         @Id
         @GeneratedValue(strategy = GenerationType.UUID)
