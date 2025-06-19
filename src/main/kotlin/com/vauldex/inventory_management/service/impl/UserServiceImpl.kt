@@ -61,8 +61,8 @@ class UserServiceImpl(
 
             val userResponse = userRepo.save(user.toEntity())
             return userResponse.toResponse()
-        } catch (error: IllegalArgumentException) {
-            throw IllegalArgumentException(error.message)
+        } catch (error: Exception) {
+            throw Exception(error.message)
         }
     }
 
