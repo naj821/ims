@@ -1,6 +1,8 @@
 package com.vauldex.inventory_management.service.abstraction
 
+import com.vauldex.inventory_management.domain.dto.request.ProfileCreateRequest
 import com.vauldex.inventory_management.domain.dto.request.TokenRequest
+import com.vauldex.inventory_management.domain.dto.response.ProfileReponse
 import com.vauldex.inventory_management.domain.dto.response.UserResponse
 import com.vauldex.inventory_management.domain.entity.TokenEntity
 import java.util.UUID
