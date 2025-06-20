@@ -5,6 +5,7 @@ import com.vauldex.inventory_management.domain.dto.request.UserCreateRequest
 import com.vauldex.inventory_management.domain.dto.request.UserLoginRequest
 import com.vauldex.inventory_management.domain.dto.response.LoginResponse
 import com.vauldex.inventory_management.domain.dto.response.UserResponse
+import com.vauldex.inventory_management.domain.entity.UserEntity
 import com.vauldex.inventory_management.repository.TokenRepository
 import com.vauldex.inventory_management.repository.UserRepository
 import com.vauldex.inventory_management.service.abstraction.AuthenticationService
@@ -91,5 +92,12 @@ class UserServiceImpl(
         }catch (error: MissingRequestCookieException) {
             throw error
         }
+    }
+
+    override fun getUserEntity(id: UUID): UserEntity {
+        val user = userRepo.findById(id).orElse(null)
+        if(user == null) throw IllegalArgumentException("USER_NOT_FOUND")
+
+        return user
     }
 }

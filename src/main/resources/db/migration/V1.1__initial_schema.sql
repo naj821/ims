@@ -7,6 +7,7 @@ CREATE TABLE users(
 );
 
 CREATE TABLE profiles(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     first_name VARCHAR(50) NOT NULL,
     middle_name VARCHAR(50),

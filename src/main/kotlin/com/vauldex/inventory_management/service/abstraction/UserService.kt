@@ -5,6 +5,7 @@ import com.vauldex.inventory_management.domain.dto.request.UserCreateRequest
 import com.vauldex.inventory_management.domain.dto.request.UserLoginRequest
 import com.vauldex.inventory_management.domain.dto.response.LoginResponse
 import com.vauldex.inventory_management.domain.dto.response.UserResponse
+import com.vauldex.inventory_management.domain.entity.UserEntity
 import java.util.UUID
 
 interface UserService {
@@ -12,4 +13,5 @@ interface UserService {
     fun create(user: UserCreateRequest): UserResponse
     fun find(idUser: UUID): UserResponse
     fun logout(token: String): Unit
+    fun getUserEntity(id: UUID): UserEntity
 }

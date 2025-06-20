@@ -19,6 +19,8 @@ class SecuredSecurityConfig {
             authorizeHttpRequests {
                 authorize("/api/products", permitAll)
                 authorize("/api/products", authenticated)
+                authorize("/api/profiles", permitAll)
+                authorize("/api/profiles", authenticated)
             }
             formLogin {
                 loginPage = "/api/sessions"
